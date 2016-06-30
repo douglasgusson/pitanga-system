@@ -35,7 +35,7 @@ public class MailSender {
     private static final String SMTP_SOCKETFACTORY_PORT = "465";
     private static final String SMTP_AUTH = "true";
     private static final String SMTP_PORT = "465";
-    
+
     //mail.smtp.socketFactory.class", ""
 
     public void enviarVenda(Venda venda) {
@@ -54,12 +54,12 @@ public class MailSender {
                         @Override
                         protected PasswordAuthentication getPasswordAuthentication() {
                             return new PasswordAuthentication(
-                                    "ditadorsistemas@gmail.com", "pitangasystem");
+                                    "email@gmail.com", "senha");
                         }
                     });
 
             Message message = new MimeMessage(session);
-            Address from = new InternetAddress("ditadorsistemas@gmail.com");
+            Address from = new InternetAddress("email@gmail.com");
             Address to = new InternetAddress(venda.getCliente().getEmail());
             message.setFrom(from);
             message.addRecipient(RecipientType.TO, to);
@@ -74,7 +74,7 @@ public class MailSender {
                     + "Este e-mail foi enviado automaticamente pelo sistema da empresa.\n"
                     + "<br/><br/>\n"
                     + "Powered by Ditador Sistemas"
-                    + "<a href=\"mailto:ditadorsistemas@gmail.com\" "
+                    + "<a href=\"mailto:email@gmail.com\" "
                     + "target=\"_blank\" class=headline style=\"DISPLAY: block; "
                     + "FONT-SIZE: 11px; COLOR: #333; FONT-FAMILY:arial;\">"
                     + "ditadorsistemas@gmail.com</a>";
@@ -101,7 +101,7 @@ public class MailSender {
             attachment1.setFileName(file.getName());
             //adicionando o anexo na multipart
             multipart.addBodyPart(attachment1);
-            //adicionando a multipart como conteudo da mensagem 
+            //adicionando a multipart como conteudo da mensagem
             message.setContent(multipart);
             //enviando
             Transport.send(message);
@@ -113,5 +113,5 @@ public class MailSender {
             JOptionPane.showMessageDialog(null, ex);
         }
     }
-    
+
 }
