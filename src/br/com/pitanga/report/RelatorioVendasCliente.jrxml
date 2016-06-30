@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioVendasCliente" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de0c49c9-776a-45ae-885e-283c5319dd46">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+     venda."cod_venda" AS venda_cod_venda,
+     venda."data_venda" AS venda_data_venda,
+     venda."valor_venda" AS venda_valor_venda,
+     venda."valor_desconto" AS venda_valor_desconto,
+     venda."quant_parcela" AS venda_quant_parcela,
+     venda."cod_cliente" AS venda_cod_cliente,
+     cliente."nome_cliente" AS cliente_nome_cliente,
+     cliente."cod_cliente" AS cliente_cod_cliente
+FROM
+     "public"."cliente" cliente INNER JOIN "public"."venda" venda ON cliente."cod_cliente" = venda."cod_cliente"
+]]>
+	</queryString>
+	<field name="venda_cod_venda" class="java.lang.Integer"/>
+	<field name="venda_data_venda" class="java.sql.Date"/>
+	<field name="venda_valor_venda" class="java.math.BigDecimal"/>
+	<field name="venda_valor_desconto" class="java.math.BigDecimal"/>
+	<field name="venda_quant_parcela" class="java.lang.Integer"/>
+	<field name="venda_cod_cliente" class="java.lang.Integer"/>
+	<field name="cliente_nome_cliente" class="java.lang.String"/>
+	<field name="cliente_cod_cliente" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="76" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="40" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

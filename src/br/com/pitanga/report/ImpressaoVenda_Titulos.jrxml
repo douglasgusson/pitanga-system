@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ImpressaoVenda_Titulos" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="4fc9fa1f-20de-48f5-baa4-161bdfd24216">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_VENDA" class="java.lang.Integer">
+		<property name="ID_VENDA" value=""/>
+		<parameterDescription><![CDATA[cod_venda]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     *,
+     (SELECT COUNT(*) FROM "titulo_venda" WHERE cod_venda = $P{ID_VENDA}),
+     titulo_venda."numero_parcela" AS titulo_venda_numero_parcela,
+     titulo_venda."valor_parcela" AS titulo_venda_valor_parcela,
+     titulo_venda."vencimento" AS titulo_venda_vencimento,
+     titulo_venda."cod_venda" AS titulo_venda_cod_venda
+FROM
+     "titulo_venda" titulo_venda
+WHERE
+     cod_venda = $P{ID_VENDA}]]>
+	</queryString>
+	<field name="cod_titulo_venda" class="java.lang.Integer"/>
+	<field name="cod_venda" class="java.lang.Integer"/>
+	<field name="numero_parcela" class="java.lang.Integer"/>
+	<field name="valor_parcela" class="java.math.BigDecimal"/>
+	<field name="vencimento" class="java.sql.Date"/>
+	<field name="count" class="java.lang.Long"/>
+	<field name="titulo_venda_numero_parcela" class="java.lang.Integer"/>
+	<field name="titulo_venda_valor_parcela" class="java.math.BigDecimal"/>
+	<field name="titulo_venda_vencimento" class="java.sql.Date"/>
+	<field name="titulo_venda_cod_venda" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<rectangle>
+				<reportElement x="-1" y="1" width="241" height="25" uuid="d5701404-06e9-4dc5-b7ca-7ae4ad6b3b51"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="80" height="25" uuid="4f55622b-d392-453a-bff6-34a4d182d405"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PARCELA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="1" width="80" height="25" uuid="0ebc74fb-1e81-45b7-8e9e-54324e09a53e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VALOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="1" width="80" height="25" uuid="720fd9d3-c658-4ecf-a76b-a6ee5896e2bb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VENCIMENTO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="2" width="80" height="20" uuid="476c21e0-5a54-4d90-bee0-73ff3c91a009"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[String.format("%02d",$F{titulo_venda_numero_parcela})
++" / "+String.format("%02d",$F{count})]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="160" y="2" width="80" height="20" uuid="9314f070-675b-49ae-895c-9b6e08d2c87e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{titulo_venda_vencimento}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="80" y="2" width="80" height="20" uuid="481a2138-f53b-49bb-8446-138ec3d77d8d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{titulo_venda_valor_parcela}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="5">
+			<line>
+				<reportElement x="0" y="1" width="240" height="1" uuid="37b2d181-d33e-44d1-bc0d-680adf94c51c"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

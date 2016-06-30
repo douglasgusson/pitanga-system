@@ -1,0 +1,226 @@
+package br.com.pitanga.view;
+
+import br.com.pitanga.dao.model.ProdutoDAO;
+import br.com.pitanga.domain.Produto;
+import br.com.pitanga.table.cellrenderer.ProdutoCellRenderer;
+import br.com.pitanga.table.model.ProdutoTableModel;
+import br.com.pitanga.util.GUIUtils;
+import br.com.pitanga.dao.DAOFactory;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.List;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
+
+/**
+ *
+ * @author Douglas Gusson
+ */
+public class FrmBuscaProduto extends javax.swing.JDialog {
+
+    private List<Produto> produtos;
+
+    private FrmVenda frmVenda;
+    private FrmCompra frmCompra;
+    private FrmListagemProdutoVenda frmListagemProdutoVenda;
+
+    private static final int ORIGEM_VENDA = 1;
+    private static final int ORIGEM_COMPRA = 2;
+    private static final int ORIGEM_LISTAGEM_PRODUTO_VENDA = 3;
+
+    private int origem;
+
+    private FrmBuscaProduto(Window owner) {
+        super(owner, DEFAULT_MODALITY_TYPE);
+        initComponents();
+        initialize();
+    }
+
+    public FrmBuscaProduto(Window owner, FrmVenda frmVenda) {
+        this(owner);
+        this.frmVenda = frmVenda;
+        this.origem = ORIGEM_VENDA;
+    }
+
+    public FrmBuscaProduto(Window owner, FrmCompra frmCompra) {
+        this(owner);
+        this.frmCompra = frmCompra;
+        this.origem = ORIGEM_COMPRA;
+    }
+
+    public FrmBuscaProduto(Window owner,
+            FrmListagemProdutoVenda frmListagemProdutoVenda) {
+        this(owner);
+        this.frmListagemProdutoVenda = frmListagemProdutoVenda;
+        this.origem = ORIGEM_LISTAGEM_PRODUTO_VENDA;
+    }
+
+    private void definirManipuladores() {
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                devolverProduto();
+            }
+        });
+        btSair.addActionListener((ActionEvent e) -> {
+            if (!devolverProduto()) {
+                this.dispose();
+            }
+        });
+        tbProduto.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    devolverProduto();
+                }
+            }
+        });
+        tfPesquisa.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String termo = tfPesquisa.getText().trim();
+                preencherTabelaPesquisa(termo);
+            }
+        });
+        // Se teclarmos ESC nesta janela, ela irá se fechar:  
+        this.getRootPane().registerKeyboardAction((ActionEvent e) -> {
+            FrmBuscaProduto.this.dispose();
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
+
+    private void initialize() {
+        definirManipuladores();
+        preencherTabela();
+        this.setTitle("Pitanga System - Consulta produtos");
+        GUIUtils.considerarEnterComoTab(this);
+        this.tfPesquisa.requestFocus();
+    }
+
+    private void preencherTabela() {
+        ProdutoDAO pd = DAOFactory.getDefaultDAOFactory().getProdutoDAO();
+        this.produtos = pd.listarTodos();
+        if (!this.produtos.isEmpty()) {
+            this.tbProduto.setModel(new ProdutoTableModel(this.produtos));
+            this.tbProduto.setDefaultRenderer(Object.class, new ProdutoCellRenderer());
+        }
+    }
+
+    private void preencherTabelaPesquisa(String nome) {
+        ProdutoDAO pd = DAOFactory.getDefaultDAOFactory().getProdutoDAO();
+        this.produtos = pd.buscarPorNome(nome);
+        tbProduto.setModel(new ProdutoTableModel(produtos));
+        tbProduto.setDefaultRenderer(Object.class, new ProdutoCellRenderer());
+    }
+
+    private boolean devolverProduto() {
+        
+        int selecionada = tbProduto.getSelectedRow();
+        
+        if (selecionada != -1) {
+            ProdutoTableModel obj = new ProdutoTableModel(produtos);
+            Produto produto = obj.get(selecionada);
+
+            switch (origem) {
+                case ORIGEM_VENDA:
+                    frmVenda.setProduto(produto);
+                    dispose();
+                    break;
+                case ORIGEM_COMPRA:
+                    frmCompra.preencherCamposProduto(produto);
+                    dispose();
+                    break;
+                case ORIGEM_LISTAGEM_PRODUTO_VENDA:
+                    frmListagemProdutoVenda.setProduto(produto);
+                    dispose();
+                    break;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbProduto = new javax.swing.JTable();
+        btSair = new javax.swing.JButton();
+        tfPesquisa = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
+
+        tbProduto.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        tbProduto.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(tbProduto);
+
+        btSair.setText("Sair");
+
+        jLabel1.setText("Pesquisa:");
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 617, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfPesquisa)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btSair)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(btSair))
+                .addContainerGap(52, Short.MAX_VALUE))
+        );
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btSair;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tbProduto;
+    private javax.swing.JTextField tfPesquisa;
+    // End of variables declaration//GEN-END:variables
+}

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ImpressaoVenda_Empresa" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="9c2e7f3e-7135-4ad4-8b04-618a29eab3d7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_EMPRESA" class="java.lang.Integer">
+		<parameterDescription><![CDATA[cod_empresa]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     empresa."cod_empresa" AS empresa_cod_empresa,
+     empresa."razao_social" AS empresa_razao_social,
+     empresa."nome_fantasia" AS empresa_nome_fantasia,
+     empresa."cnpj" AS empresa_cnpj,
+     empresa."inscricao" AS empresa_inscricao,
+     empresa."endereco" AS empresa_endereco,
+     empresa."numero" AS empresa_numero,
+     empresa."bairro" AS empresa_bairro,
+     empresa."cep" AS empresa_cep,
+     empresa."telefone" AS empresa_telefone,
+     empresa."celular" AS empresa_celular,
+     empresa."email" AS empresa_email,
+     empresa."logomarca" AS empresa_logomarca,
+     empresa."cod_cidade" AS empresa_cod_cidade,
+     cidade."cod_cidade" AS cidade_cod_cidade,
+     cidade."nome_cidade" AS cidade_nome_cidade,
+     cidade."sigla_uf" AS cidade_sigla_uf
+FROM
+     "public"."cidade" cidade INNER JOIN "public"."empresa" empresa ON cidade."cod_cidade" = empresa."cod_cidade"
+WHERE
+     empresa."cod_empresa" = $P{ID_EMPRESA}]]>
+	</queryString>
+	<field name="empresa_cod_empresa" class="java.lang.Integer"/>
+	<field name="empresa_razao_social" class="java.lang.String"/>
+	<field name="empresa_nome_fantasia" class="java.lang.String"/>
+	<field name="empresa_cnpj" class="java.lang.String"/>
+	<field name="empresa_inscricao" class="java.lang.String"/>
+	<field name="empresa_endereco" class="java.lang.String"/>
+	<field name="empresa_numero" class="java.lang.String"/>
+	<field name="empresa_bairro" class="java.lang.String"/>
+	<field name="empresa_cep" class="java.lang.String"/>
+	<field name="empresa_telefone" class="java.lang.String"/>
+	<field name="empresa_celular" class="java.lang.String"/>
+	<field name="empresa_email" class="java.lang.String"/>
+	<field name="empresa_logomarca" class="java.lang.String"/>
+	<field name="empresa_cod_cidade" class="java.lang.Integer"/>
+	<field name="cidade_cod_cidade" class="java.lang.Integer"/>
+	<field name="cidade_nome_cidade" class="java.lang.String"/>
+	<field name="cidade_sigla_uf" class="java.lang.String"/>
+	<detail>
+		<band height="71">
+			<textField>
+				<reportElement x="104" y="0" width="290" height="21" uuid="015eb851-597e-4764-94d5-e1ab54e065da"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{empresa_razao_social}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="104" y="21" width="290" height="49" uuid="25e8ea0f-45a6-4936-a408-0465770a4c55"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{empresa_endereco} +", "+ $F{empresa_numero} +", "+ $F{empresa_bairro} +" - "+ $F{empresa_cep} +"\n"
++$F{cidade_nome_cidade} + " - " + $F{cidade_sigla_uf}+"\n"+$F{empresa_telefone} +" / "+ $F{empresa_celular}+"\n"
++$F{empresa_email}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="4" y="1" width="88" height="69" uuid="0675ee1f-a929-4135-ad4a-75c36de1b716"/>
+				<imageExpression><![CDATA[$F{empresa_logomarca}]]></imageExpression>
+			</image>
+		</band>
+	</detail>
+</jasperReport>
